@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Кондитерская</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <a href="/" class="logo-link">
+                    <img src="/img/logo.jpg" alt="Логотип кондитерской" class="logo">
+                </a>
+
+                <ul class="header-list">
+                    <li class="header-list-item">
+                        <a class="header-list-link" href="/">Главная</a>
+                    </li>
+                    <li class="header-list-item">
+                        <a class="header-list-link" href="/">Прайс</a>
+                    </li>
+                    <li class="header-list-item">
+                        <a class="header-list-link" href="/">Отзывы</a>
+                    </li>
+                    <li class="header-list-item">
+                        <a class="header-list-link" href="/">Контакты</a>
+                    </li>
+                </ul>
+
+                <a class="header-button" href="/">Заказать</a>
+
+                <button class="burger" aria-label="Открыть меню" type="button">
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="login">
+            <div class="login-container">
+                <div class="login-text">
+                    <h2 class="login-title">Регистрация</h2>
+                    <p class="login-desc">Создайте аккаунт, чтобы получать накопительную скидку и отслеживать заказы</p>
+                </div>
+
+                <form class="login-form register-form"
+                      action="/"
+                      method="POST"
+                      enctype="multipart/form-data"
+                      id="form"
+                      oninput="controll()">
+
+                    <label class="register-label" for="first_name">Имя</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="text"
+                               name="first_name" id="first_name"
+                               placeholder="Иван"
+                               minlength="3" maxlength="20"
+                               pattern="(^[A-Za-z]{3,20}$)|(^[А-ЯЁа-яё]{3,20}$)"
+                               title="Только буквы (русские или латинские), от 3 до 20 символов"
+                               required>
+                        <span class="valid-icon" id="valid_first_name">✓</span>
+                        <span class="invalid-icon" id="invalid_first_name">✕</span>
+                    </div>
+                    <p class="hint">Введите имя латинскими или русскими буквами, минимум 3 буквы, максимум 20 букв</p>
+
+                    <label class="register-label" for="last_name">Фамилия</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="text"
+                               name="last_name" id="last_name"
+                               placeholder="Иванов"
+                               minlength="3" maxlength="20"
+                               pattern="(^[A-Za-z]{3,20}$)|(^[А-ЯЁа-яё]{3,20}$)"
+                               title="Только буквы (русские или латинские), от 3 до 20 символов"
+                               required>
+                        <span class="valid-icon" id="valid_last_name">✓</span>
+                        <span class="invalid-icon" id="invalid_last_name">✕</span>
+                    </div>
+                    <p class="hint">Введите фамилию латинскими или русскими буквами, минимум 3 буквы, максимум 20 букв</p>
+
+                    <label class="register-label" for="user_pic">Изображение профиля</label>
+                    <div class="input-wrap">
+                        <input class="login-input login-input--file" type="file"
+                               name="user_pic" id="user_pic"
+                               accept="image/jpeg,image/jpg,image/png,image/bmp"
+                               required>
+                        <span class="valid-icon" id="valid_user_pic">✓</span>
+                        <span class="invalid-icon" id="invalid_user_pic">✕</span>
+                    </div>
+                    <p class="hint">Выберите изображение в формате jpeg, jpg, png или bmp размером не более 2 Мб</p>
+
+                    <label class="register-label" for="email">E-mail</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="email"
+                               name="email" id="email"
+                               placeholder="example@mail.ru"
+                               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                               title="Введите корректный e-mail, например user@mail.ru"
+                               required>
+                        <span class="valid-icon" id="valid_email">✓</span>
+                        <span class="invalid-icon" id="invalid_email">✕</span>
+                    </div>
+                    <p class="hint">На этот адрес придёт письмо для подтверждения аккаунта</p>
+
+                    <!-- Телефон -->
+                    <label class="register-label" for="phone">Номер телефона</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="tel"
+                               name="phone" id="phone"
+                               placeholder="+7 (999) 123-45-67"
+                               pattern="^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$"
+                               title="Формат: +7 (XXX) XXX-XX-XX"
+                               required>
+                        <span class="valid-icon" id="valid_phone">✓</span>
+                        <span class="invalid-icon" id="invalid_phone">✕</span>
+                    </div>
+                    <p class="hint">Введите номер телефона в формате +7 (XXX) XXX-XX-XX</p>
+
+                    <!-- Пароль -->
+                    <label class="register-label" for="password">Пароль</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="password"
+                               name="password" id="password"
+                               placeholder="••••••••"
+                               minlength="6" maxlength="20"
+                               pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,20}"
+                               title="6–20 символов, минимум одна заглавная, одна строчная, одна цифра и один спецсимвол"
+                               required>
+                        <span class="valid-icon" id="valid_password">✓</span>
+                        <span class="invalid-icon" id="invalid_password">✕</span>
+                    </div>
+                    <p class="hint">От 6 до 20 символов, обязательно одна заглавная и строчная английская буква, одна цифра и один спец. символ. Русские буквы не допускаются</p>
+
+                    <!-- Повтор пароля -->
+                    <label class="register-label" for="password2">Повторите пароль</label>
+                    <div class="input-wrap">
+                        <input class="login-input" type="password"
+                               name="password2" id="password2"
+                               placeholder="••••••••"
+                               minlength="6" maxlength="20"
+                               required>
+                        <span class="valid-icon" id="valid_password2">✓</span>
+                        <span class="invalid-icon" id="invalid_password2">✕</span>
+                    </div>
+                    <p class="hint" id="hint_password2">Пароли должны совпадать</p>
+
+                    <div class="registr-button">
+                        <a class="login-button login-button--secondary" href="index.html">На главную</a>
+                        <button type="submit" class="login-button" id="submit" disabled>Зарегистрироваться</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <a href="/">Прайс</a>
+            <a href="/">Отзывы</a>
+            <a href="/">Контакты</a>
+        </div>
+
+        <p class="footer-copy">All rights reserved, 2026</p>
+
+        <div class="footer-container">
+            <a href="/">Вконтакте</a>
+            <a href="/">Whats Up</a>
+            <a href="/">Max</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
