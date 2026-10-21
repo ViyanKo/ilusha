@@ -1,12 +1,13 @@
 <?php 
-require __DIR__ . "/../service/UserService.php";
+require_once __DIR__ . "/../service/UserService.php";
 
 class UserController
 {
     public function register()
     {
         if ($_SERVER["REQUEST_METHOD"] === "GET") {
-                require __DIR__ . "/../public/pages/cab.php";
+                require __DIR__ . "/../public/pages/registration.html";
+                return;
             }
         $first_name = $_POST['first_name'];
         $last_name  = $_POST['last_name'];
@@ -15,12 +16,9 @@ class UserController
         $password   = $_POST['password'];
 
         $userService = new UserService();
-        $user = $userService->createUser($first_name, $last_name, $email, $phone, $password);
+        $user = $userService->createUser($first_name, $last_name, $email, $password, $phone);
         require __DIR__ . "/../public/pages/cab.php";
     }
-    
-
-    
 }
 
 ?>
