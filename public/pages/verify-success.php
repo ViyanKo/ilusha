@@ -1,15 +1,21 @@
+<?php
+/** @var array $verifiedUser */
+$firstName = $verifiedUser['first_name'] ?? '';
+$email = $verifiedUser['email'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кондитерская</title>
+    <title>Email подтверждён — Кондитерская</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <header class="header">
         <div class="header-container">
             <nav class="header-nav">
@@ -19,7 +25,7 @@
 
                 <ul class="header-list">
                     <li class="header-list-item">
-                        <a class="header-list-link active" href="/">Главная</a>
+                        <a class="header-list-link" href="/">Главная</a>
                     </li>
                     <li class="header-list-item">
                         <a class="header-list-link" href="/">Прайс</a>
@@ -42,42 +48,24 @@
     </header>
 
     <main>
-        <section class="hero">
-            <div class="hero-container">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        торты <span class="text-decor">авторские</span> на заказ
-                    </h1>
-                    <p class="hero-desc">
-                        Мы — кондитерская по изготовлению тортов на заказ. Находимся на рынке более 5 лет и успели порадовать тысячи людей своим качеством и эстетикой.
-                    </p>
-                    <a class="hero-button" href="/">Смотреть цены</a>
-                </div>
-                <img class="hero-image" src="/img/hero.jpg" alt="Авторский торт">
-            </div>
-        </section>
-
         <section class="login">
             <div class="login-container">
                 <div class="login-text">
-                    <h2 class="login-title">Авторизация</h2>
-                    <p class="login-desc">Войдите в аккаунт, чтобы получить накопительную скидку</p>
+                    <h2 class="login-title">Email подтверждён</h2>
+                    <p class="login-desc">
+                        <?php if ($firstName !== ''): ?>
+                            Спасибо, <?php echo htmlspecialchars($firstName, ENT_QUOTES, 'UTF-8'); ?>!
+                        <?php else: ?>
+                            Спасибо!
+                        <?php endif; ?>
+                        Адрес <?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?> успешно подтверждён.
+                    </p>
                 </div>
 
-                <form class="login-form" action="#" method="post">
-                    <input class="login-input" type="text" name="login" placeholder="Логин" required>
-                    <input class="login-input" type="password" name="password" placeholder="Пароль" required>
-
-                    <label class="login-checkbox">
-                        <input type="checkbox" name="remember">
-                        <span>Оставаться на сайте</span>
-                    </label>
-
-                    <div class="registr-button">
-                        <a class="login-button login-button--secondary" href="/register">Зарегистрироваться</a>
-                        <button type="submit" class="login-button">Войти в аккаунт</button>
-                    </div>
-                </form>
+                <div class="registr-button">
+                    <a class="login-button login-button--secondary" href="/">На главную</a>
+                    <a class="login-button" href="/cab">В личный кабинет</a>
+                </div>
             </div>
         </section>
     </main>

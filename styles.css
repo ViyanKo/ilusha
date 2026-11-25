@@ -668,3 +668,248 @@ button {
 #hint_password2 {
     transition: color 0.25s ease;
 }
+
+.error-page {
+    margin: 0 auto;
+    width: min(100%, 680px);
+    padding: 40px 16px;
+}
+
+.error-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 40px 24px;
+    text-align: center;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 40px rgba(75, 64, 63, 0.12);
+}
+
+.error-page-title {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 600;
+    color: #c98b5e;
+}
+
+.error-page-message {
+    max-width: 520px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--dark);
+}
+
+.error-page-link {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    background: #c98b5e;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.error-page-link:hover {
+    background: #b2744a;
+    transform: translateY(-1px);
+}
+
+.login-error,
+.form-message--error,
+.error {
+    color: #c0392b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.form-message--success {
+    color: #5cb85c;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.profile-card {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.profile-card td {
+    padding: 18px;
+    vertical-align: top;
+}
+
+.profile-avatar {
+    width: 280px;
+    text-align: center;
+    border-radius: var(--radius);
+    background: rgba(201, 139, 94, 0.08);
+}
+
+.profile-avatar--filled {
+    padding: 0;
+}
+
+.profile-avatar-image {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.profile-avatar-text {
+    display: block;
+    padding: 40px 12px;
+    color: var(--gray);
+    font-size: 14px;
+}
+
+.profile-info {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.profile-hello strong {
+    color: #c98b5e;
+}
+
+.profile-subtitle {
+    margin: 28px 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-logout {
+    margin-top: 18px;
+}
+
+.photo-upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.photo-upload-input,
+.login-input--file {
+    width: 100%;
+    font-size: 13px;
+}
+
+.photo-upload-button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.photo-upload-hint,
+.hint {
+    color: var(--gray);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.photo-upload-message {
+    min-height: 18px;
+    font-size: 13px;
+    color: #5cb85c;
+}
+
+.photo-upload-message--error {
+    color: #c0392b;
+}
+
+.upload-form {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.upload-button {
+    width: 100%;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.gallery-item {
+    overflow: hidden;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 24px rgba(75, 64, 63, 0.1);
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.gallery-item figcaption {
+    padding: 10px 12px;
+    font-size: 12px;
+    word-break: break-all;
+    color: var(--gray);
+}
+
+.gallery-empty {
+    padding: 32px;
+    text-align: center;
+    color: var(--gray);
+}
+
+.cookie-banner {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 360px;
+    padding: 20px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 16px 36px rgba(75, 64, 63, 0.2);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.cookie-accept {
+    align-self: flex-end;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: var(--radius);
+    background: #c98b5e;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cookie-accept:hover {
+    background: #b2744a;
+}
+
+@media (max-width: 720px) {
+    .profile-card,
+    .profile-card tbody,
+    .profile-card tr,
+    .profile-card td {
+        display: block;
+        width: 100%;
+    }
+
+    .profile-avatar {
+        width: 100%;
+    }
+
+    .cookie-banner {
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+        max-width: none;
+    }
+}

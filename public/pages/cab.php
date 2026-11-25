@@ -1,7 +1,13 @@
 <?php 
-require_once __DIR__ . "/../../service/UserService.php";
-?>
+if (!isset($user) || !is_array($user)) {
+    header('Location: /register');
+    exit;
+}
 
+$photoUrl = $photoUrl ?? null;
+$photoSuccess = $photoSuccess ?? false;
+$photoError = $photoError ?? '';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -58,22 +64,52 @@ require_once __DIR__ . "/../../service/UserService.php";
                     $phone = $user['phone'];
                 ?>
 
-                <!-- Верхний блок: аватар слева, приветствие справа, всё в одну строку -->
                 <table class="profile-card">
                     <tr>
-                        <td class="profile-avatar">
-                            Здесь будет ваше изображение
+                        <td class="profile-avatar<?php echo $photoUrl ? ' profile-avatar--filled' : ''; ?>">
+                            <?php if ($photoUrl): ?>
+                                <img class="profile-avatar-image"
+                                     src="<?php echo htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8'); ?>"
+                                     alt="Фото пользователя">
+                            <?php else: ?>
+                                <span class="profile-avatar-text">Здесь будет ваше изображение</span>
+                            <?php endif; ?>
+
+                            <form class="photo-upload-form"
+                                  action="/cab/photo"
+                                  method="POST"
+                                  enctype="multipart/form-data"
+                                  id="photo_form">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="5242880">
+                                <input class="photo-upload-input"
+                                       type="file"
+                                       name="photo"
+                                       id="photo"
+                                       accept="image/jpeg,image/png,image/gif,image/webp"
+                                       required>
+                                <label class="login-button photo-upload-button" for="photo">Загрузить</label>
+                                <p class="hint photo-upload-hint">JPG, PNG, GIF или WebP, размер не более 5 МБ</p>
+                                <p class="photo-upload-message" id="photo_message" role="alert"></p>
+
+                                <?php if ($photoSuccess): ?>
+                                    <p class="form-message form-message--success">Изображение успешно загружено</p>
+                                <?php endif; ?>
+
+                                <?php if ($photoError !== ''): ?>
+                                    <p class="form-message form-message--error"><?php echo htmlspecialchars($photoError, ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php endif; ?>
+                            </form>
                         </td>
                         <td class="profile-info">
                             <p class="profile-hello">
-                                Добро пожаловать, <strong><?php echo $first_name . ' ' . $last_name; ?></strong>
+                                Добро пожаловать, <strong><?php echo htmlspecialchars($first_name) . ' ' . htmlspecialchars($last_name); ?></strong>
                             </p>
 
-                            <a class="login-button login-button--secondary profile-logout" href="unautoriz.php">Выйти из приложения</a>
+                            <a class="login-button login-button--secondary profile-logout" href="/logout">Выйти из приложения</a>
 
                             <?php
-                                $check = 0;
-                                if ($check != 1) {
+                                $check = (int) ($user['check_email'] ?? 0);
+                                if ($check !== 1) {
                                     echo "<p class='error'>Адрес электронной почты не подтверждён, зайдите на почту. Аккаунт будет удалён в течение 30 дней в случае отсутствия подтверждения!</p>";
                                 }
                             ?>
@@ -87,23 +123,23 @@ require_once __DIR__ . "/../../service/UserService.php";
                 <table class="profile-table">
                     <tr>
                         <td>ID</td>
-                        <td id="id_u"></td>
+                        <td id="id_u"><?php echo htmlspecialchars($id); ?></td>
                     </tr>
                     <tr>
                         <td>Имя</td>
-                        <td><?php echo $first_name; ?></td>
+                        <td><?php echo htmlspecialchars($first_name); ?></td>
                     </tr>
                     <tr>
                         <td>Фамилия</td>
-                        <td><?php echo $last_name; ?></td>
+                        <td><?php echo htmlspecialchars($last_name); ?></td>
                     </tr>
                     <tr>
                         <td>Электронная почта</td>
-                        <td><?php echo $email; ?></td>
+                        <td><?php echo htmlspecialchars($email); ?></td>
                     </tr>
                     <tr>
                         <td>Телефон</td>
-                        <td><?php echo $phone; ?></td>
+                        <td><?php echo htmlspecialchars($phone); ?></td>
                     </tr>
                 </table>
             </div>

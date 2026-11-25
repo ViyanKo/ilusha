@@ -17,12 +17,87 @@ const burger = document.querySelector('.burger');
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    function initCookieBanner() {
+        const consentName = 'cookie_consent';
+
+        if (document.cookie.split('; ').some(item => item.startsWith(consentName + '='))) {
+            return;
+        }
+
+        const banner = document.createElement('div');
+        banner.className = 'cookie-banner';
+        banner.innerHTML = '<p>Мы используем cookie для работы сайта. Продолжая, вы соглашаетесь с их использованием.</p>' +
+            '<button type="button" class="cookie-accept">Принять</button>';
+
+        document.body.appendChild(banner);
+
+        banner.querySelector('.cookie-accept').addEventListener('click', () => {
+            document.cookie = consentName + '=1; path=/; max-age=31536000; SameSite=Lax';
+            banner.remove();
+        });
+    }
+
+    function initPhotoUpload() {
+        const form = document.getElementById('photo_form');
+        const input = document.getElementById('photo');
+        const message = document.getElementById('photo_message');
+
+        if (!form || !input || !message) {
+            return;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        const maxSize = 5 * 1024 * 1024;
+
+        function showMessage(text, isError) {
+            message.textContent = text;
+            message.classList.toggle('photo-upload-message--error', Boolean(isError));
+        }
+
+        input.addEventListener('change', () => {
+            showMessage('', false);
+
+            if (!input.files || input.files.length === 0) {
+                showMessage('Выберите изображение', true);
+                return;
+            }
+
+            const file = input.files[0];
+
+            if (!allowedTypes.includes(file.type)) {
+                showMessage('Допустимы только JPG, PNG, GIF и WebP', true);
+                input.value = '';
+                return;
+            }
+
+            if (file.size > maxSize) {
+                showMessage('Размер файла не должен превышать 5 МБ', true);
+                input.value = '';
+                return;
+            }
+
+            showMessage('Файл выбран: ' + file.name, false);
+        });
+
+        form.addEventListener('submit', (event) => {
+            if (!input.files || input.files.length === 0) {
+                event.preventDefault();
+                showMessage('Выберите изображение', true);
+            }
+        });
+    }
+
     const form = document.getElementById('form');
     const submitBtn = document.getElementById('submit');
 
-    const first_name = document.getElementById('first_name');
-    const last_name = document.getElementById('last_name');
-    const user_pic = document.getElementById('user_pic');
+    if (!form || !submitBtn) {
+        initCookieBanner();
+        initPhotoUpload();
+        return;
+    }
+
+    const firstName = document.getElementById('first_name');
+    const lastName = document.getElementById('last_name');
     const email = document.getElementById('email');
     const phone = document.getElementById('phone');
     const password = document.getElementById('password');
@@ -48,133 +123,126 @@ document.addEventListener('DOMContentLoaded', function () {
             invalidIcon.style.display = 'inline-block';
         }
     }
+
     function checkFirstName() {
-        const ok = first_name.checkValidity();
-        setIcon(first_name, ok);
+        const ok = Boolean(firstName && firstName.checkValidity());
+        if (firstName) setIcon(firstName, ok);
         return ok;
     }
 
     function checkLastName() {
-        const ok = last_name.checkValidity();
-        setIcon(last_name, ok);
+        const ok = Boolean(lastName && lastName.checkValidity());
+        if (lastName) setIcon(lastName, ok);
         return ok;
     }
 
     function checkEmail() {
-        const ok = email.checkValidity();
-        setIcon(email, ok);
+        const ok = Boolean(email && email.checkValidity());
+        if (email) setIcon(email, ok);
         return ok;
     }
 
     function checkPhone() {
-        phone.value = phone.value.replace(/[^\d+\s()\-]/g, '');
-        const ok = phone.checkValidity();
-        setIcon(phone, ok);
+        const ok = Boolean(phone && phone.checkValidity());
+        if (phone) setIcon(phone, ok);
         return ok;
     }
 
     function checkPassword() {
-        const ok = password.checkValidity();
-        setIcon(password, ok);
+        const ok = Boolean(password && password.checkValidity());
+        if (password) setIcon(password, ok);
         return ok;
     }
 
     function checkPassword2() {
         const hint = document.getElementById('hint_password2');
+
+        if (!password2) {
+            return false;
+        }
+
         const okLength = password2.value.length >= 6;
         const okMatch = password2.value === password.value && password2.value !== '';
 
         if (!okLength) {
             password2.setCustomValidity('Пароль должен содержать минимум 6 символов');
-            hint.textContent = 'Пароль должен содержать минимум 6 символов';
-            hint.style.color = '#d9534f';
+            if (hint) {
+                hint.textContent = 'Пароль должен содержать минимум 6 символов';
+                hint.style.color = '#d9534f';
+            }
             setIcon(password2, false);
             return false;
         }
 
         if (!okMatch) {
             password2.setCustomValidity('Пароли не совпадают');
-            hint.textContent = 'Пароли не совпадают';
-            hint.style.color = '#d9534f';
+            if (hint) {
+                hint.textContent = 'Пароли не совпадают';
+                hint.style.color = '#d9534f';
+            }
             setIcon(password2, false);
             return false;
         }
 
         password2.setCustomValidity('');
-        hint.textContent = 'Пароли совпадают';
-        hint.style.color = '#5cb85c';
+        if (hint) {
+            hint.textContent = 'Пароли совпадают';
+            hint.style.color = '#5cb85c';
+        }
         setIcon(password2, true);
         return true;
     }
 
-    function checkFile() {
-        const icon = {
-            valid: document.getElementById('valid_user_pic'),
-            invalid: document.getElementById('invalid_user_pic')
-        };
-        if (!icon.valid || !icon.invalid) return false;
-
-        if (!user_pic.files || user_pic.files.length === 0) {
-            user_pic.setCustomValidity('Выберите изображение профиля');
-            icon.valid.style.display = 'none';
-            icon.invalid.style.display = 'inline-block';
-            return false;
-        }
-
-        const file = user_pic.files[0];
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
-        const maxSize = 2 * 1024 * 1024; // 2 Мб
-
-        if (!allowedTypes.includes(file.type)) {
-            user_pic.setCustomValidity('Только форматы jpeg, jpg, png или bmp');
-            icon.valid.style.display = 'none';
-            icon.invalid.style.display = 'inline-block';
-            return false;
-        }
-
-        if (file.size > maxSize) {
-            user_pic.setCustomValidity('Размер файла не должен превышать 2 Мб');
-            icon.valid.style.display = 'none';
-            icon.invalid.style.display = 'inline-block';
-            return false;
-        }
-
-        user_pic.setCustomValidity('');
-        icon.valid.style.display = 'inline-block';
-        icon.invalid.style.display = 'none';
-        return true;
-    }
-     window.controll = function () {
+    window.controll = function () {
         const okFirst = checkFirstName();
         const okLast = checkLastName();
         const okEmail = checkEmail();
         const okPhone = checkPhone();
         const okPass = checkPassword();
         const okPass2 = checkPassword2();
-        const okFile = checkFile();
 
-        const allValid = okFirst && okLast && okEmail && okPhone && okPass && okPass2 && okFile;
+        const allValid = okFirst && okLast && okEmail && okPhone && okPass && okPass2;
 
         submitBtn.disabled = !allValid;
         return allValid;
     };
 
-    first_name.addEventListener('input', checkFirstName);
-    last_name.addEventListener('input', checkLastName);
-    email.addEventListener('input', checkEmail);
-    phone.addEventListener('input', checkPhone);
-    password.addEventListener('input', function () {
-        checkPassword();
-        if (password2.value !== '') checkPassword2();
-    });
-    password2.addEventListener('input', checkPassword2);
-    user_pic.addEventListener('change', function () {
-        checkFile();
-        controll();
-    });
-    form.addEventListener('submit', function (e) {
-        if (!controll()) {
-            e.preventDefault();
+    if (firstName) firstName.addEventListener('input', checkFirstName);
+    if (lastName) lastName.addEventListener('input', checkLastName);
+    if (email) email.addEventListener('input', checkEmail);
+    if (phone) phone.addEventListener('input', checkPhone);
+    if (password) {
+        password.addEventListener('input', function () {
+            checkPassword();
+            if (password2 && password2.value !== '') checkPassword2();
+        });
+    }
+    if (password2) password2.addEventListener('input', checkPassword2);
+
+    if (phone) {
+        phone.addEventListener('input', function () {
+            let digits = phone.value.replace(/\D/g, '');
+
+            if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+            if (!digits.startsWith('7')) digits = '7' + digits;
+
+            digits = digits.slice(0, 11);
+
+            let formatted = '+7';
+            if (digits.length > 1) formatted += ' (' + digits.slice(1, 4);
+            if (digits.length >= 4) formatted += ') ' + digits.slice(4, 7);
+            if (digits.length >= 7) formatted += '-' + digits.slice(7, 9);
+            if (digits.length >= 9) formatted += '-' + digits.slice(9, 11);
+
+            phone.value = formatted;
+            checkPhone();
+            window.controll();
+        });
+    }
+
+    form.addEventListener('submit', function (event) {
+        if (!window.controll()) {
+            event.preventDefault();
 
             const firstInvalid = form.querySelector(':invalid');
             if (firstInvalid) {
@@ -184,23 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    phone.addEventListener('input', function () {
-        let digits = phone.value.replace(/\D/g, '');
-
-        if (digits.startsWith('8')) digits = '7' + digits.slice(1);
-        if (!digits.startsWith('7')) digits = '7' + digits;
-
-        digits = digits.slice(0, 11);
-
-        let formatted = '+7';
-        if (digits.length > 1) formatted += ' (' + digits.slice(1, 4);
-        if (digits.length >= 4) formatted += ') ' + digits.slice(4, 7);
-        if (digits.length >= 7) formatted += '-' + digits.slice(7, 9);
-        if (digits.length >= 9) formatted += '-' + digits.slice(9, 11);
-
-        phone.value = formatted;
-        checkPhone();
-        controll();
-    });
-    controll();
+    initCookieBanner();
+    initPhotoUpload();
+    window.controll();
 });
