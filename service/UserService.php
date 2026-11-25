@@ -677,7 +677,7 @@ class UserService
         }
 
         header('Retry-After: ' . $secondsLeft);
-        throw new ApiError('Ваш IP заблокирован. Осталось ' . $secondsLeft . ' с.', 429);
+        throw new ApiError('Ваш IP заблокирован. Осталось ' . $secondsLeft . ' с.', 429, $secondsLeft);
     }
 
     public function registerFailedLogin(string $ip): void

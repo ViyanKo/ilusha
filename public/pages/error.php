@@ -55,7 +55,14 @@ http_response_code($status);
         <section class="error-page">
             <div class="error-page-container">
                 <h1 class="error-page-title">Ошибка <?= htmlspecialchars($status, ENT_QUOTES, 'UTF-8') ?></h1>
-                <p class="error-page-message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+                <?php if ($status === 429 && isset($error) && $error instanceof ApiError && $error->getRetryAfter() > 0): ?>
+                    <p class="error-page-message">
+                        Ваш IP заблокирован. Осталось
+                        <span data-block-seconds="<?= $error->getRetryAfter() ?>"><?= $error->getRetryAfter() ?></span> с.
+                    </p>
+                <?php else: ?>
+                    <p class="error-page-message"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
                 <a class="error-page-link" href="/">Вернуться на главную</a>
             </div>
         </section>

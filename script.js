@@ -87,6 +87,42 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function initBlockTimer() {
+        const timer = document.querySelector('[data-block-seconds]');
+
+        if (!timer) {
+            return;
+        }
+
+        let seconds = Number.parseInt(timer.dataset.blockSeconds, 10);
+
+        if (!Number.isFinite(seconds) || seconds <= 0) {
+            return;
+        }
+
+        const message = timer.closest('.error-page-message');
+        const link = document.querySelector('.error-page-link');
+
+        const intervalId = setInterval(() => {
+            seconds = Math.max(0, seconds - 1);
+            timer.textContent = String(seconds);
+
+            if (seconds === 0) {
+                clearInterval(intervalId);
+
+                if (message) {
+                    message.textContent = 'Блокировка снята. Теперь можно войти в аккаунт.';
+                }
+
+                if (link) {
+                    link.textContent = 'Войти в аккаунт';
+                }
+            }
+        }, 1000);
+    }
+
+    initBlockTimer();
+
     const form = document.getElementById('form');
     const submitBtn = document.getElementById('submit');
 

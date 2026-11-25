@@ -1,9 +1,12 @@
 <?php 
 class ApiError extends RuntimeException
 {
-    public function __construct(string $msg, int $status)
+    private int $retryAfter;
+
+    public function __construct(string $msg, int $status, int $retryAfter = 0)
     {
         parent::__construct($msg, $status);
+        $this->retryAfter = $retryAfter;
     }
 
     public function getStatusCode(): int
@@ -11,10 +14,16 @@ class ApiError extends RuntimeException
         return $this->code;
     }
 
+    public function getRetryAfter(): int
+    {
+        return $this->retryAfter;
+    }
+
     public function sendResponse(): void
     {
         http_response_code($this->getStatusCode());
 
+        $error = $this;
         $message = $this->getMessage();
         $status = $this->getStatusCode();
 
